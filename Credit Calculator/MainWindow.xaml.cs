@@ -27,32 +27,26 @@ namespace Credit_Calculator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int Amount = int.Parse(amount.Text); //сумма кредита
-            int Term = int.Parse(term.Text);     //срок кредита месяцы
-            double Percentages = double.Parse(percentages.Text); //процентная ставка
+            int amount = int.Parse(Amount.Text); //сумма кредита
+            int creditPeriod = int.Parse(CreditPeriod.Text);     //срок кредита месяцы
+            double percentages = double.Parse(Percentages.Text); //процентная ставка
 
-            double resultMonthly = CalculationMonthly(Amount, Term, Percentages);
+            double resultMonthly = CalculationMonthly(amount, creditPeriod, percentages);
 
-            double resultSum = CalculationSum(resultMonthly, Term);
+            double resultSum = CalculationSum(resultMonthly, creditPeriod);
 
             sum.Text = Math.Round(resultSum, 2).ToString();
             monthly.Text = Math.Round(resultMonthly, 2).ToString();
         }
 
-        private double CalculationMonthly(int amount, int term, double percentages)
+        private double CalculationMonthly(int amount, int creditPeriod, double percentages)
         {
-            double result;
-            double x = (percentages / 100 / 12) + 1;
-            double y = Math.Pow(x, term);
-
-            result = amount * ((x - 1) / (1 - (1 / y)));
-
-            return result;
+            return amount * (percentages / 100 / 12) / (1 - 1 / Math.Pow(percentages / 100 / 12 + 1, creditPeriod));
         }
 
-        private double CalculationSum(double resultMonthly, int term)
+        private double CalculationSum(double resultMonthly, int creditPeriod)
         {
-            return resultMonthly * term;
+            return resultMonthly * creditPeriod;
         }
     }
 }
